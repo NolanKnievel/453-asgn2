@@ -1,5 +1,7 @@
-#define next sched_one;
-#define prev sched_two;
+#define next sched_one
+#define prev sched_two
+
+#include <stdlib.h>
 #include "lwp.h"
 #include "fp.h"
 
@@ -25,6 +27,6 @@ thread rr_next() {}
 int rr_qlen() {}
 
 struct scheduler rr_publish = {NULL, NULL, rr_admit, rr_remove, rr_next, rr_qlen};
-scheduler = &rr_publish;
+scheduler RoundRobin = &rr_publish;
 
 
