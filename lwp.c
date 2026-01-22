@@ -12,17 +12,17 @@
 // ---- SCHEDULER ----
 
 // Add the passed context to the scheduler’s scheduling pool
-void rr_admit(thread new) {return;}
+void rr_admit(thread new) {}
 
 // Remove the passed context from the scheduler’s scheduling pool
-void rr_remove(thread victim) {return;}
+void rr_remove(thread victim) {}
 
 
 // Return the next thread to be run or NULL if there isn’t one
-thread rr_next() {return;}
+thread rr_next() {}
 
 // Return the number of runnable threads
-int rr_qlen() {return;}
+int rr_qlen() {}
 
 struct scheduler rr_publish = {NULL, NULL, rr_admit, rr_remove, rr_next, rr_qlen};
 scheduler = &rr_publish;
