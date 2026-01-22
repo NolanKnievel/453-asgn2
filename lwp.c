@@ -1,7 +1,7 @@
 #define next sched_one;
 #define prev sched_two;
 #include "lwp.h"
-#include "fp.h"
+#include <~/pn-cs453/Given/Asgn2/include/fp.h>
 
 // RULES
 // saved bp/end of args must be divisible by 16
