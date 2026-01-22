@@ -21,10 +21,10 @@ void rr_remove(thread victim) {}
 
 
 // Return the next thread to be run or NULL if there isn’t one
-thread rr_next() {}
+thread rr_next() {return }
 
 // Return the number of runnable threads
-int rr_qlen() {}
+int rr_qlen() {return 0;}
 
 struct scheduler rr_publish = {NULL, NULL, rr_admit, rr_remove, rr_next, rr_qlen};
 scheduler RoundRobin = &rr_publish;
