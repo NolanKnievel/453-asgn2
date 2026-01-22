@@ -48,6 +48,7 @@ int main(void) {
     print_queue(t1);
 
     printf("\nCall rr_next() a few times:\n");
+    int i;
     for(int i = 0; i < 5; i++) {
         thread next = rr_next();
         printf("Next thread: %lu\n", next->tid);
