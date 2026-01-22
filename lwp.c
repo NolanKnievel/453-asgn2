@@ -21,7 +21,7 @@ void rr_remove(thread victim) {}
 
 
 // Return the next thread to be run or NULL if there isn’t one
-thread rr_next() {return }
+// thread rr_next() {return; }
 
 // Return the number of runnable threads
 int rr_qlen() {return 0;}
