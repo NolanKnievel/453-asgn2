@@ -2,6 +2,7 @@
 #define prev sched_two
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "lwp.h"
 #include "fp.h"
 
@@ -56,6 +57,7 @@ int rr_qlen() {
 // Remove the passed context from the scheduler’s scheduling pool
 void rr_remove(thread victim) {
 
+    int queue_length = rr_qlen();
     // case - queue length 1 and removing head - empty the queue
     if (queue_length == 1 && victim == ready_head) {
         ready_head = NULL;
