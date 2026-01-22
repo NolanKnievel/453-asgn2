@@ -7,3 +7,6 @@ LDFLAGS = -shared
 
 lwp.o : lwp.c lwp.h
 	$(CC) $(CFLAGS) -c lwp.c -o lwp.o
+
+clean: 
+	rm -f *.o
