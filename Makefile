@@ -5,5 +5,5 @@ LDFLAGS = -shared
 
 
 
-lwp.o : lwp.c
+lwp.o : lwp.c lwp.h
 	$(CC) $(CFLAGS) -c lwp.c -o lwp.o
