@@ -57,38 +57,30 @@ int rr_qlen() {
 // Remove the passed context from the scheduler’s scheduling pool
 void rr_remove(thread victim) {
 
-    int queue_length = rr_qlen();
-    // case - queue length 1 and removing head - empty the queue
-    if (queue_length == 1 && victim == ready_head) {
+    if (!ready_head || !victim) return;
+
+    // only one thread in queue
+    if (ready_head == victim && ready_head->next == ready_head) {
         ready_head = NULL;
         return;
     }
 
-    // case - removing head
+    // adjust head if victim is head
     if (victim == ready_head) {
-        ready_head = ready_head->next; // advance head 
+        ready_head = ready_head->next;
     }
 
+    thread prev_thread = victim->prev; // prev pointer
+    thread next_thread = victim->next; // next pointer
 
-    // traverse to victim, if we reach head again do nothing(victim not here)
-    thread current_thread = ready_head->next;
-    while (current_thread != ready_head) {
-        current_thread = current_thread->next;
-    }
-
-    // at front and didn't find victim
-    if(current_thread == ready_head && victim != ready_head) {
-        // got back to front - victim DNE in queue
-        // error - victim not found
-        fprintf(stderr, "Error: Thread not found in scheduler\n");
+    if (!prev_thread || !next_thread) {
+        fprintf(stderr, "Error: Thread has invalid neighbors\n");
         return;
     }
-    
-    // remove victim
-    thread front_thread = current_thread->next;
-    thread back_thread = current_thread->prev;
-    front_thread->prev = back_thread;
-    back_thread->next = front_thread;
+
+    // skip victim
+    prev_thread->next = next_thread;
+    next_thread->prev = prev_thread;
     return;
 
 }
