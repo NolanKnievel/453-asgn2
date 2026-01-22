@@ -2,4 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-printf("hello from test");
+
+int main(void) {
+    printf("hello from test");
+    return 0;
+}
