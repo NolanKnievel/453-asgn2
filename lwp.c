@@ -27,10 +27,10 @@ void rr_admit(thread new) {
     }
 
     // otherwise, add to back of queue
-    thread former_last_thread = ready_head->prev;
+    thread former_last_thread = ready_head->prev; // save last head of queue
     former_last_thread->next = new;
-    thread current_head->prev = new;
-    new->next = current_head;
+    ready_head->prev = new;
+    new->next = ready_head;
     new->prev = former_last_thread;
     return;
 }
