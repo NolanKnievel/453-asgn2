@@ -1,4 +1,4 @@
-#include "lwp.c"
+#include "lwp.h"
 #include <stdlib.h>
 #include <stdio.h>
 

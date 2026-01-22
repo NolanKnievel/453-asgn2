@@ -1,6 +1,5 @@
 CC = gcc
 CFLAGS = -Wall -Werror -fPIC
-LDFLAGS =
 
 liblwp.so : lwp.o
 	$(CC) -shared lwp.o -o liblwp.so
@@ -13,4 +12,3 @@ test_scheduler : test_scheduler.c liblwp.so
 
 clean:
 	rm -f *.o *.so test_scheduler
-
