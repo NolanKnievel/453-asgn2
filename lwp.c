@@ -27,13 +27,31 @@ void rr_admit(thread new) {
     }
 
     // otherwise, add to back of queue
-    former_last_thread = ready_head->prev;
+    thread former_last_thread = ready_head->prev;
     former_last_thread->next = new;
-    current_head->prev = new;
+    thread current_head->prev = new;
     new->next = current_head;
     new->prev = former_last_thread;
     return;
 }
+
+// Return the number of runnable threads
+int rr_qlen() {
+    if (!ready_head) {
+        return 0;
+    }    
+
+    // traverse LL until we reach ready_head again, keeping count
+    int count = 1;
+    thread current_thread = ready_head->next;
+    while(current_thread != ready_head) {
+        current_thread = current_thread->next;
+        count++;
+    }
+
+    return count;
+}
+
 
 // Remove the passed context from the scheduler’s scheduling pool
 void rr_remove(thread victim) {
@@ -52,9 +70,9 @@ void rr_remove(thread victim) {
         // if next thread is victim, remove it
         if(next_thread == victim) {
 
-            thread new_next_thread = current_thread->next->next
+            thread new_next_thread = current_thread->next->next;
             current_thread->next = new_next_thread;
-            new_next_thread->prev = curr;
+            new_next_thread->prev = current_thread;
             return;
         }
 
@@ -82,22 +100,6 @@ thread rr_next() {
     return ready_head;
 }
 
-// Return the number of runnable threads
-int rr_qlen() {
-    if (!ready_head) {
-        return 0;
-    }    
-
-    // traverse LL until we reach ready_head again, keeping count
-    int count = 1;
-    thread current_thread = ready_head->next;
-    while(current_thread != ready_head) {
-        current_thread = current->next;
-        count++;
-    }
-
-    return count;
-}
 
 // NOTE - include rr_next as 5th arg
 struct scheduler rr_publish = {NULL, NULL, rr_admit, rr_remove, rr_next, rr_qlen};
