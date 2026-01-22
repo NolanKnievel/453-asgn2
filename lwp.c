@@ -56,33 +56,39 @@ int rr_qlen() {
 // Remove the passed context from the scheduler’s scheduling pool
 void rr_remove(thread victim) {
 
-    int queue_length = rr_qlen();
-    // case - queue length 1 - empty the queue
-    if (queue_length == 1) {
+    // case - queue length 1 and removing head - empty the queue
+    if (queue_length == 1 && victim == ready_head) {
         ready_head = NULL;
+        return;
     }
+
+    // case - removing head
+    if (victim == ready_head) {
+        ready_head = ready_head->next; // advance head 
+    }
+
 
     // traverse to victim, if we reach head again do nothing(victim not here)
-    thread current_thread = ready_head;
-    thread next_thread = current_thread->next;
-    while (next_thread != ready_head) {
-
-        // if next thread is victim, remove it
-        if(next_thread == victim) {
-
-            thread new_next_thread = current_thread->next->next;
-            current_thread->next = new_next_thread;
-            new_next_thread->prev = current_thread;
-            return;
-        }
-
-        // otherwise keep looking
-        current_thread = next_thread;
-        next_thread = next_thread->next;
-
+    thread current_thread = ready_head->next;
+    while (current_thread != ready_head) {
+        current_thread = current_thread->next;
     }
 
+    // at front and didn't find victim
+    if(current_thread == ready_head && victim != ready_head) {
+        // got back to front - victim DNE in queue
+        // error - victim not found
+        fprintf(stderr, "Error: Thread not found in scheduler\n");
+        return;
+    }
+    
+    // remove victim
+    thread front_thread = current_thread->next;
+    thread back_thread = current_thread->prev;
+    front_thread->prev = back_thread;
+    back_thread->next = front_thread;
     return;
+
 }
 
 
@@ -95,9 +101,9 @@ thread rr_next() {
     
     // move head to next, if there is a next available
     thread t = ready_head;
-    ready_head = t->next;
+    ready_head = t->next; // advance head
 
-    return ready_head;
+    return t;
 }
 
 
