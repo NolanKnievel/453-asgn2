@@ -40,10 +40,10 @@ void lwp_yield(void) {
     thread prev_current_thread = current_thread;
     current_thread = next_thread;
 
-    printf("swapping rfiles\n");
+    printf("Swapping rfiles\n");
     // save current thread state, and transfer control
     swap_rfiles(&(prev_current_thread->state), &(current_thread->state));
-    printf("returing\n");
+    printf("Returning\n");
     return; // pop return address into instruction pointer
 
 }
