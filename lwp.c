@@ -28,6 +28,7 @@ void lwp_yield(void) {
     // get next thread from scheduler
     scheduler s = lwp_get_scheduler();
     thread next_thread = s->next();
+    printf("Next thread: %d\n", next_thread->tid);
 
     // if no next thread, terminate the program
     if (next_thread == NULL) {
@@ -39,6 +40,7 @@ void lwp_yield(void) {
     thread prev_current_thread = current_thread;
     current_thread = next_thread;
 
+    printf("swapping rfiles\n");
     // save current thread state, and transfer control
     swap_rfiles(&(prev_current_thread->state), &(current_thread->state));
     return; // pop return address into instruction pointer
