@@ -19,10 +19,9 @@ void lwp_start(void) {
 
     swap_rfiles(&t->rfile, NULL);
 
-
     // create context for calling thread
     struct threadinfo_st t;
-    t.tid = tid;
+    t.tid = 0;
     t.next = &t;
     t.prev = &t;
     t.stack = NULL;
@@ -48,8 +47,8 @@ void lwp_start(void) {
 }
 
 
-tid t lwp_create(lwpfun function, void *argument);
+tid_t lwp_create(lwpfun function, void *argument);
 void lwp_yield(void);
 void lwp_exit(int exitval);
-tid t lwp_wait(int *status);
-tid t lw_gettid(void);
+tid_t lwp_wait(int *status);
+tid_t lw_gettid(void);
