@@ -43,6 +43,7 @@ void lwp_yield(void) {
     printf("swapping rfiles\n");
     // save current thread state, and transfer control
     swap_rfiles(&(prev_current_thread->state), &(current_thread->state));
+    printf("returing\n");
     return; // pop return address into instruction pointer
 
 }
