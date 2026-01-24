@@ -16,7 +16,6 @@
 // Starts the threading system. Converts original system thread into a LWP
 void lwp_start(void) {
 
-    swap_rfiles(&t->rfile, NULL);
 
     // create context for calling thread
     struct threadinfo_st t;
@@ -25,7 +24,7 @@ void lwp_start(void) {
     t.prev = &t;
     t.stack = NULL;
     t.stacksize = 0;
-    t.rfile = NULL;
+    t.state = NULL;
     t.status = LWP_LIVE;
     t.exited = NULL;
     t.lib_one = NULL;
@@ -33,7 +32,7 @@ void lwp_start(void) {
 
     
     // save current register state
-    swap_rfiles(&t->rfile, NULL);
+    swap_rfiles(&t.state, NULL);
     
     // admit calling thread to scheduler
     lwp_set_scheduler(NULL);
