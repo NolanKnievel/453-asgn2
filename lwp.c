@@ -17,6 +17,10 @@
 // track current thread globally -- 
 static thread current_thread = NULL;
 
+// debugging struct
+struct user_regs_struct regs;
+
+
 // Terminates the current lwp, yields to whichever thread teh scheduler chooses
 // Does not return
 void lwp_exit(int exitval);
@@ -61,8 +65,27 @@ void lwp_start(void) {
     t.lib_two = NULL;
 
     
+
+    // debug - log regs
+    if (inforeg(pid, &regs) == 0) {  // assume 0 = success
+        printf("RAX: 0x%llx\n", regs.rax);
+        printf("RBX: 0x%llx\n", regs.rbx);
+        printf("RIP: 0x%llx\n", regs.rip);   // instruction pointer
+        printf("RSP: 0x%llx\n", regs.rsp);   // stack pointer
+    }
+
+
     // save current register state
     swap_rfiles(&t.state, NULL);
+
+    // debug - log regs
+    if (inforeg(pid, &regs) == 0) {  // assume 0 = success
+        printf("RAX: 0x%llx\n", regs.rax);
+        printf("RBX: 0x%llx\n", regs.rbx);
+        printf("RIP: 0x%llx\n", regs.rip);   // instruction pointer
+        printf("RSP: 0x%llx\n", regs.rsp);   // stack pointer
+    }
+
     
     // admit calling thread to scheduler
     lwp_set_scheduler(NULL);
