@@ -130,7 +130,7 @@ tid_t lwp_create(lwpfun function, void *argument) {
     void *stack_ptr = mmap(NULL,stack_size,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK,-1,0);
     if (stack_ptr == MAP_FAILED) {
         perror("mmap");
-        return NULL;
+        return -1;
     }
 
     void *stack_top = (char *)stack_ptr + stack_size;
