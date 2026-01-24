@@ -36,7 +36,7 @@ void lwp_start(void) {
     // admit calling thread to scheduler
     lwp_set_scheduler(NULL);
     scheduler s = lwp_get_scheduler();
-    s.admit(t);
+    s->admit(&t);
 
     // yield to next thread in schedule
     lwp_yield();
