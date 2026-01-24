@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lwp.h"
+#include "scheduler.h"
 
 void rr_admit(thread new);
 void rr_remove(thread victim);
