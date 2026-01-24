@@ -40,7 +40,7 @@ void lwp_yield(void) {
 
     // save current thread and update it
     thread prev_current_thread = current_thread;
-    current_thread = next;
+    current_thread = next_thread;
 
     // save current thread state, and transfer control
     swap_rfiles(&(prev_current_thread->state), &(current_thread->state));
@@ -76,7 +76,7 @@ void lwp_start(void) {
     // yield to next thread in schedule
     lwp_yield();
 
-    printf("Thread %d yielded control\n", t.tid);
+    printf("Thread yielded control\n");
 }
 
 
