@@ -3,7 +3,7 @@
 #include "lwp.h"
 #include "scheduler.h"
 
-void main() {
+int main() {
     printf("Hello, World!\n");
     return;
 
