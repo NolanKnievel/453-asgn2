@@ -4,11 +4,17 @@ CFLAGS = -Wall -Werror -fPIC
 liblwp.so : lwp.o
 	$(CC) -shared lwp.o -o liblwp.so
 
-lwp.o : lwp.c lwp.h
+lwp.o : lwp.c lwp.h 
 	$(CC) $(CFLAGS) -c lwp.c -o lwp.o
 
-test_scheduler : test_scheduler.c liblwp.so
-	$(CC) -Wall -Werror test_scheduler.c -L. -llwp -o test_scheduler
+scheduler.o : scheduler.c scheduler.h
+	$(CC) $(CFLAGS) -c scheduler.c -o scheduler.o
+
+test_scheduler.o : test_scheduler.c lwp.h scheduler.h
+	$(CC) $(CFLAGS) -c test_scheduler.c -o test_scheduler.o
+
+test_scheduler : test_scheduler.o liblwp.so
+	$(CC) -Wall -Werror test_scheduler.o -L. -llwp -o test_scheduler
 
 clean:
 	rm -f *.o *.so test_scheduler
