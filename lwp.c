@@ -1,8 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/mman.h>
 #include "lwp.h"
 #include "fp.h"
 #include "scheduler.h"
+
+#define DEFAULT_STACK_SIZE (8 * 1024 * 1024) // 8 MB
+
+
 
 // RULES
 // saved bp/end of args must be divisible by 16
@@ -82,11 +88,61 @@ void lwp_start(void) {
     // yield to next thread in schedule
     lwp_yield();
 
+    // yielded back to main thread
     printf("Thread yielded control\n");
     return;
 }
 
+// helper --  determine stack size for allocation
+size_t get_stack_size() {
+    // get page size
+    long pagesize = sysconf(_SC_PAGESIZE);
+    if (pagesize <= 0) {
+        perror("sysconf(_SC_PAGESIZE)");
+        return DEFAULT_STACK_SIZE;  // fallback
+    }
 
-tid_t lwp_create(lwpfun function, void *argument);
+    
+    // check stack size limit, and use if not infinity
+    struct rlimit rl;
+    if (getrlimit(RLIMIT_STACK, &rl) != 0) {
+        perror("getrlimit");
+        return DEFAULT_STACK_SIZE;
+    }
+
+    size_t stack_size;
+    if (rl.rlim_cur == RLIM_INFINITY) {
+        stack_size = DEFAULT_STACK_SIZE;
+    } else {
+        stack_size = rl.rlim_cur;
+    }
+
+    // round up to multiple of page size
+    stack_size = ((stack_size + pagesize - 1) / pagesize) * pagesize;
+
+    return stack_size;
+}
+
+tid_t lwp_create(lwpfun function, void *argument) {
+    // Initialize new thread's stack frame
+    size_t stack_size = get_stack_size();
+    void *stack_ptr = mmap(NULL,stack_size,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK,-1,0);
+    if (stack_ptr == MAP_FAILED) {
+        perror("mmap");
+        return NULL;
+    }
+
+    void *stack_top = (char *)stack + stack_size;
+
+    printf("top of stack: %p\n", stack_top);
+
+    // Initialize new thread's context
+
+
+
+    // admit new thread to the schedule
+}
+
+
 tid_t lwp_wait(int *status);
 tid_t lw_gettid(void);
