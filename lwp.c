@@ -62,15 +62,17 @@ void lwp_start(void) {
     t->lib_two = NULL;
 
 
+    printf("swapping rfiles\n");
     // save current register state
     swap_rfiles(&t->state, NULL);
 
-    
+    printf("setting scheduler\n");
     // admit calling thread to scheduler
     lwp_set_scheduler(NULL);
     scheduler s = lwp_get_scheduler();
     s->admit(t);
 
+    printf("yielding\n");
     // yield to next thread in schedule
     lwp_yield();
 
