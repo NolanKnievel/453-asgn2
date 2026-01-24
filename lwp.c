@@ -1,4 +1,3 @@
-#include <sys/user.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "lwp.h"
@@ -53,45 +52,27 @@ void lwp_yield(void) {
 // Starts the threading system. Converts original system thread into a LWP
 void lwp_start(void) {
     
-    // create context for calling thread
-    struct threadinfo_st t;
-    t.tid = 0;
-    t.sched_one = &t;
-    t.sched_two = &t;
-    t.stack = NULL;
-    t.stacksize = 0;
-    t.status = LWP_LIVE;
-    t.exited = NULL;
-    t.lib_one = NULL;
-    t.lib_two = NULL;
-
-    
-
-    // debug - log regs
-    if (inforeg(pid, &regs) == 0) {  // assume 0 = success
-        printf("RAX: 0x%llx\n", regs.rax);
-        printf("RBX: 0x%llx\n", regs.rbx);
-        printf("RIP: 0x%llx\n", regs.rip);   // instruction pointer
-        printf("RSP: 0x%llx\n", regs.rsp);   // stack pointer
-    }
+    // create a context for calling thread on the heap
+    thread t = malloc(sizeof(struct threadinfo_st));
+    t->tid = 0;
+    t->sched_one = t;
+    t->sched_two = t;
+    t->stack = NULL;
+    t->stacksize = 0;
+    t->status = LWP_LIVE;
+    t->exited = NULL;
+    t->lib_one = NULL;
+    t->lib_two = NULL;
 
 
     // save current register state
-    swap_rfiles(&t.state, NULL);
-
-    // debug - log regs
-    if (inforeg(pid, &regs) == 0) {  // assume 0 = success
-        printf("RAX: 0x%llx\n", regs.rax);
-        printf("RBX: 0x%llx\n", regs.rbx);
-        printf("RIP: 0x%llx\n", regs.rip);   // instruction pointer
-        printf("RSP: 0x%llx\n", regs.rsp);   // stack pointer
-    }
+    swap_rfiles(&t->state, NULL);
 
     
     // admit calling thread to scheduler
     lwp_set_scheduler(NULL);
     scheduler s = lwp_get_scheduler();
-    s->admit(&t);
+    s->admit(t);
 
     // yield to next thread in schedule
     lwp_yield();
