@@ -35,8 +35,9 @@ void print_queue(thread head) {
 int main(void) {
     printf("=== Scheduler Test ===\n");
 
-    // lwp_set_scheduler(RoundRobin);
-    // scheduler s = lwp_get_scheduler();
+    // Set scheduler (NULL -> defaults to RoundRobin)
+    lwp_set_scheduler(NULL);
+    scheduler s = lwp_get_scheduler();
 
     // Create dummy threads
     thread t1 = create_dummy_thread(1);
@@ -44,33 +45,35 @@ int main(void) {
     thread t3 = create_dummy_thread(3);
 
     printf("\nAdmit threads...\n");
-    rr_admit(t1);
-    rr_admit(t2);
-    rr_admit(t3);
+    s->admit(t1);
+    s->admit(t2);
+    s->admit(t3);
 
-    printf("Queue length: %d\n", rr_qlen());
-    print_queue(t1);
+    printf("Queue length: %d\n", s->qlen());
+    print_queue(t1);  // assuming print_queue can still work for any scheduler
 
-    printf("\nCall rr_next() a few times:\n");
-    int i;
-    for(i = 0; i < 5; i++) {
-        thread next = rr_next();
-        printf("Next thread: %lu\n", next->tid);
+    printf("\nCall next() a few times:\n");
+    for (int i = 0; i < 5; i++) {
+        thread next = s->next();
+        if (next)
+            printf("Next thread: %lu\n", next->tid);
+        else
+            printf("Next thread: NULL\n");
     }
 
     printf("\nRemove thread 2:\n");
-    rr_remove(t2);
-    printf("Queue length: %d\n", rr_qlen());
+    s->remove(t2);
+    printf("Queue length: %d\n", s->qlen());
     print_queue(t1);
 
     printf("\nRemove head thread 1:\n");
-    rr_remove(t1);
-    printf("Queue length: %d\n", rr_qlen());
+    s->remove(t1);
+    printf("Queue length: %d\n", s->qlen());
     print_queue(t3);
 
     printf("\nRemove last thread 3:\n");
-    rr_remove(t3);
-    printf("Queue length: %d\n", rr_qlen());
+    s->remove(t3);
+    printf("Queue length: %d\n", s->qlen());
     print_queue(NULL);
 
     // Free allocated memory
@@ -80,3 +83,53 @@ int main(void) {
 
     return 0;
 }
+
+
+// int main(void) {
+//     printf("=== Scheduler Test ===\n");
+
+//     lwp_set_scheduler();
+//     scheduler s = lwp_get_scheduler();
+
+//     // Create dummy threads
+//     thread t1 = create_dummy_thread(1);
+//     thread t2 = create_dummy_thread(2);
+//     thread t3 = create_dummy_thread(3);
+
+//     printf("\nAdmit threads...\n");
+//     rr_admit(t1);
+//     rr_admit(t2);
+//     rr_admit(t3);
+
+//     printf("Queue length: %d\n", rr_qlen());
+//     print_queue(t1);
+
+//     printf("\nCall rr_next() a few times:\n");
+//     int i;
+//     for(i = 0; i < 5; i++) {
+//         thread next = rr_next();
+//         printf("Next thread: %lu\n", next->tid);
+//     }
+
+//     printf("\nRemove thread 2:\n");
+//     rr_remove(t2);
+//     printf("Queue length: %d\n", rr_qlen());
+//     print_queue(t1);
+
+//     printf("\nRemove head thread 1:\n");
+//     rr_remove(t1);
+//     printf("Queue length: %d\n", rr_qlen());
+//     print_queue(t3);
+
+//     printf("\nRemove last thread 3:\n");
+//     rr_remove(t3);
+//     printf("Queue length: %d\n", rr_qlen());
+//     print_queue(NULL);
+
+//     // Free allocated memory
+//     free(t1);
+//     free(t2);
+//     free(t3);
+
+//     return 0;
+// }

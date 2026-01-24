@@ -9,6 +9,8 @@
 
 // ---- SCHEDULER ----
 
+// TODO - when calling set scheduler, port over old schedule?
+
 // global pointers
 static thread ready_head = NULL; // head of circular ready queue
 static scheduler current_scheduler = NULL // global scheduler
@@ -96,17 +98,43 @@ thread rr_next() {
     return t;
 }
 
+// void lwp_set_scheduler(scheduler sched) {
+//     // case - arg is null
+//     if (!sched) {
+//         fprintf(stderr, "Error: Can't set scheduler to null");
+//     }
+//     current_scheduler = sched;
+
+//     if (current_scheduler->init != NULL) {
+//         current_scheduler->init()
+//     }
+// }
+
 void lwp_set_scheduler(scheduler sched) {
-    // case - arg is null
+    // fallback to RoundRobin if sched is NULL
     if (!sched) {
-        fprintf(stderr, "Error: Can't set scheduler to null");
+        sched = RoundRobin;
     }
+
+    // move threads from old scheduler to new one
+    if (current_scheduler && current_scheduler != sched) {
+        thread t;
+        // drain old scheduler in next() order
+        while ((t = current_scheduler->next()) != NULL) {
+            // add to new scheduler
+            sched->admit(t);
+        }
+    }
+
+    // set the current scheduler
     current_scheduler = sched;
 
+    // initialize if needed
     if (current_scheduler->init != NULL) {
-        current_scheduler->init()
+        current_scheduler->init();
     }
 }
+
 
 scheduler lwp_get_scheduler() {
     return current_scheduler;
