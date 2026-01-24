@@ -1,14 +1,17 @@
 CC = gcc
 CFLAGS = -Wall -Werror -fPIC
 
-liblwp.so : lwp.o scheduler.o
-	$(CC) -shared lwp.o scheduler.o -o liblwp.so
+liblwp.so : lwp.o scheduler.o magic64.o
+	$(CC) -shared lwp.o scheduler.o magic64.o -o liblwp.so
 
-lwp.o : lwp.c lwp.h 
+lwp.o : lwp.c lwp.h
 	$(CC) $(CFLAGS) -c lwp.c -o lwp.o
 
 scheduler.o : scheduler.c scheduler.h
 	$(CC) $(CFLAGS) -c scheduler.c -o scheduler.o
+
+magic64.o : magic.S
+	gcc -o magic64.o -c magic64.S
 
 test_scheduler.o : test_scheduler.c lwp.h scheduler.h
 	$(CC) $(CFLAGS) -c test_scheduler.c -o test_scheduler.o
