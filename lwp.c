@@ -75,6 +75,9 @@ void lwp_start(void) {
     scheduler s = lwp_get_scheduler();
     s->admit(t);
 
+    // update current_thread
+    current_thread = t;
+
     printf("yielding\n");
     // yield to next thread in schedule
     lwp_yield();
