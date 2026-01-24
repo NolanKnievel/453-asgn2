@@ -4,7 +4,10 @@
 #include "scheduler.h"
 
 int main() {
-    printf("Hello, World!\n");
+    printf("starting lwp!\n"); 
+
+    lwp_start();
+    
     return 0;
 
 }

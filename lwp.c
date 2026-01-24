@@ -73,6 +73,7 @@ void lwp_start(void) {
     lwp_yield();
 
     printf("Thread yielded control\n");
+    return;
 }
 
 
