@@ -4,10 +4,6 @@
 #include "fp.h"
 #include "scheduler.h"
 
-#define next sched_one
-#define prev sched_two
-
-
 // RULES
 // saved bp/end of args must be divisible by 16
 // TODO - move scheduler headers to otehr file
@@ -55,8 +51,8 @@ void lwp_start(void) {
     // create context for calling thread
     struct threadinfo_st t;
     t.tid = 0;
-    t.next = &t;
-    t.prev = &t;
+    t.sched_one = &t;
+    t.sched_two = &t;
     t.stack = NULL;
     t.stacksize = 0;
     t.status = LWP_LIVE;
