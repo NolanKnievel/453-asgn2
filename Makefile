@@ -10,7 +10,7 @@ lwp.o : lwp.c lwp.h
 scheduler.o : scheduler.c scheduler.h
 	$(CC) $(CFLAGS) -c scheduler.c -o scheduler.o
 
-magic64.o : magic.S
+magic64.o : magic64.S
 	gcc -o magic64.o -c magic64.S
 
 test_scheduler.o : test_scheduler.c lwp.h scheduler.h
