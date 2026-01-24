@@ -53,7 +53,8 @@ int main(void) {
     print_queue(t1);  // assuming print_queue can still work for any scheduler
 
     printf("\nCall next() a few times:\n");
-    for (int i = 0; i < 5; i++) {
+    int i;
+    for (i = 0; i < 5; i++) {
         thread next = s->next();
         if (next)
             printf("Next thread: %lu\n", next->tid);
