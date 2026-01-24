@@ -19,5 +19,12 @@ test_scheduler.o : test_scheduler.c lwp.h scheduler.h
 test_scheduler : test_scheduler.o liblwp.so
 	$(CC) -Wall -Werror test_scheduler.o -L. -llwp -o test_scheduler
 
+test.o : test.c lwp.h scheduler.h
+	$(CC) $(CFLAGS) -c test.c -o test.o
+
+test : test.o liblwp.so
+	$(CC) -Wall -Werror test.o -L. -llwp -o test
+
+
 clean:
 	rm -f *.o *.so test_scheduler
