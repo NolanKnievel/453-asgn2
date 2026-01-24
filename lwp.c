@@ -6,7 +6,6 @@
 #include "lwp.h"
 #include "fp.h"
 #include "scheduler.h"
-#include "magic64.S"
 
 // RULES
 // saved bp/end of args must be divisible by 16
