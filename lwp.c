@@ -17,9 +17,6 @@
 // track current thread globally -- 
 static thread current_thread = NULL;
 
-// debugging struct
-struct user_regs_struct regs;
-
 
 // Terminates the current lwp, yields to whichever thread teh scheduler chooses
 // Does not return
