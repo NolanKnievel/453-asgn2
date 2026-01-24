@@ -5,6 +5,51 @@
 #include <stdio.h>
 #include "lwp.h"
 #include "fp.h"
+#include "scheduler.h"
+#include "magic64.S"
 
 // RULES
 // saved bp/end of args must be divisible by 16
+// TODO - move scheduler headers to otehr file
+
+
+
+// Starts the threading system. Converts original system thread into a LWP
+void lwp_start(void) {
+
+    swap_rfiles(&t->rfile, NULL);
+
+
+    // create context for calling thread
+    struct threadinfo_st t;
+    t.tid = tid;
+    t.next = &t;
+    t.prev = &t;
+    t.stack = NULL;
+    t.stacksize = 0;
+    t.rfile = NULL;
+    t.status = LWP_LIVE;
+    t.exited = NULL;
+    t.lib_one = NULL;
+    t.lib_two = NULL;
+
+    
+    // save current register state
+    swap_rfiles(&t->rfile, NULL);
+    
+    // admit calling thread to scheduler
+    lwp_set_scheduler(NULL);
+    scheduler s = lwp_get_scheduler();
+    s->admit(t);
+
+    // yield to next thread in schedule
+    lwp_yield();
+
+}
+
+
+tid t lwp_create(lwpfun function, void *argument);
+void lwp_yield(void);
+void lwp_exit(int exitval);
+tid t lwp_wait(int *status);
+tid t lw_gettid(void);

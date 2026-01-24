@@ -98,17 +98,6 @@ thread rr_next() {
     return t;
 }
 
-// void lwp_set_scheduler(scheduler sched) {
-//     // case - arg is null
-//     if (!sched) {
-//         fprintf(stderr, "Error: Can't set scheduler to null");
-//     }
-//     current_scheduler = sched;
-
-//     if (current_scheduler->init != NULL) {
-//         current_scheduler->init()
-//     }
-// }
 
 void lwp_set_scheduler(scheduler sched) {
     // fallback to RoundRobin if sched is NULL
