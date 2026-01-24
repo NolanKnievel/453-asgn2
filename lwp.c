@@ -28,7 +28,7 @@ void lwp_yield(void) {
     // get next thread from scheduler
     scheduler s = lwp_get_scheduler();
     thread next_thread = s->next();
-    printf("Next thread: %d\n", next_thread->tid);
+    printf("Next thread: %lu\n", next_thread->tid);
 
     // if no next thread, terminate the program
     if (next_thread == NULL) {
