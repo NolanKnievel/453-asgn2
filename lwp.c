@@ -1,11 +1,12 @@
-#define next sched_one
-#define prev sched_two
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "lwp.h"
 #include "fp.h"
 #include "scheduler.h"
+
+#define next sched_one
+#define prev sched_two
+
 
 // RULES
 // saved bp/end of args must be divisible by 16
@@ -28,11 +29,11 @@ void lwp_exit(int exitval);
 
 void lwp_yield(void) {
     // get next thread from scheduler
-    scheduler s = lwp_get_scheduler()
-    thread next = s->next();
+    scheduler s = lwp_get_scheduler();
+    thread next_thread = s->next();
 
     // if no next thread, terminate the program
-    if (next == NULL) {
+    if (next_thread == NULL) {
         fprintf(stderr, "No next thread to switch to. Terminating.\n");
         exit(1); // call exit with termination status of calling thread
     }
