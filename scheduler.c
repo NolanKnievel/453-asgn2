@@ -13,7 +13,7 @@
 
 // global pointers
 static thread ready_head = NULL; // head of circular ready queue
-static scheduler current_scheduler = NULL // global scheduler
+static scheduler current_scheduler = NULL; // global scheduler
 
 
 // Add the passed context to the scheduler’s scheduling pool
