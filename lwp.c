@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <sys/resource.h>
 #include "lwp.h"
 #include "fp.h"
 #include "scheduler.h"
@@ -132,7 +133,7 @@ tid_t lwp_create(lwpfun function, void *argument) {
         return NULL;
     }
 
-    void *stack_top = (char *)stack + stack_size;
+    void *stack_top = (char *)stack_ptr + stack_size;
 
     printf("top of stack: %p\n", stack_top);
 
@@ -141,6 +142,7 @@ tid_t lwp_create(lwpfun function, void *argument) {
 
 
     // admit new thread to the schedule
+    return 0;
 }
 
 
