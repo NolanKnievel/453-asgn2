@@ -35,8 +35,8 @@ void print_queue(thread head) {
 int main(void) {
     printf("=== Scheduler Test ===\n");
 
-    lwp_set_scheduler(RoundRobin);
-    scheduler s = lwp_get_scheduler();
+    // lwp_set_scheduler(RoundRobin);
+    // scheduler s = lwp_get_scheduler();
 
     // Create dummy threads
     thread t1 = create_dummy_thread(1);
