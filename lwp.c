@@ -1,3 +1,4 @@
+#include <sys/user.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "lwp.h"
