@@ -3,11 +3,6 @@
 #include "lwp.h"
 #include "scheduler.h"
 
-void rr_admit(thread new);
-void rr_remove(thread victim);
-thread rr_next(void);
-int rr_qlen(void);
-
 // create a dummy thread with a given tid
 thread create_dummy_thread(tid_t tid) {
     thread t = malloc(sizeof(struct threadinfo_st));

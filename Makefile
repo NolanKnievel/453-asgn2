@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Werror -fPIC
 
-liblwp.so : lwp.o
-	$(CC) -shared lwp.o -o liblwp.so
+liblwp.so : lwp.o scheduler.o
+	$(CC) -shared lwp.o scheduler.o -o liblwp.so
 
 lwp.o : lwp.c lwp.h 
 	$(CC) $(CFLAGS) -c lwp.c -o lwp.o
