@@ -18,8 +18,8 @@ int main() {
     printf("creating thread\n");
 
     lwp_create((lwpfun)print_fun, NULL);
-    lwp_create(print_fun, NULL);
-    lwp_create(print_fun, NULL);
+    lwp_create((lwpfun)print_fun, NULL);
+    lwp_create((lwpfun)print_fun, NULL);
     printf("threads created\n");
 
     printf("yielding to next thread\n");
