@@ -30,9 +30,25 @@ static int max_thread_id;
 
 
 
-// Terminates the current lwp, yields to whichever thread teh scheduler chooses
+// Terminates the current lwp, yields to whichever thread the scheduler chooses
 // Does not return
-void lwp_exit(int exitval);
+void lwp_exit(int exitval) {
+    //  termination status becomes the low 8 bits of exitval
+    current_thread->exit_status = exitval & 0xFF;
+
+    // deschedule current thread
+    schedule s = lwp_get_scheduler();
+    s->remove(current_thread);
+
+    // yield to next thread
+    lwp_yield();
+
+    // Error - yield returns to lwp exit
+    fprintf(stderr, "lwp_exit: fatal error, returned from lwp_yield\n");
+    exit(1);
+
+
+}
 
 
 
