@@ -5,7 +5,7 @@
 
 
 
-void print_fun() {
+void print_fun(void *arg) {
     printf("hello from a thread!");
     lwp_yield();
     return;
