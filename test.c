@@ -9,9 +9,9 @@ int main() {
     lwp_start();
     printf("creating thread\n");
 
-    lwp_create(NULL, NULL);
-    lwp_create(NULL, NULL);
-    lwp_create(NULL, NULL);
+    lwp_create(print_fun, NULL);
+    lwp_create(print_fun, NULL);
+    lwp_create(print_fun, NULL);
     lwp_yield(); // yield control to next thread in schedule
     
     return 0;
@@ -20,5 +20,6 @@ int main() {
 
 void print_fun() {
     printf("hello from a thread!");
+    lwp_yield();
     return;
 }
