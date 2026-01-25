@@ -74,7 +74,7 @@ void lwp_start(void) {
 
     printf("swapping rfiles\n");
     // save current register state
-    swap_rfiles(&t->state, NULL);
+    // swap_rfiles(&t->state, NULL);
 
     printf("setting scheduler\n");
     // admit calling thread to scheduler
