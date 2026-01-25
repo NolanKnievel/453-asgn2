@@ -17,9 +17,9 @@ int main() {
     lwp_start();
     printf("creating thread\n");
 
-    lwp_create(print_fun, NULL);
-    lwp_create(print_fun, NULL);
-    lwp_create(print_fun, NULL);
+    lwp_create((lwpfun)print_fun, NULL);
+    // lwp_create(print_fun, NULL);
+    // lwp_create(print_fun, NULL);
     lwp_yield(); // yield control to next thread in schedule
     
     return 0;
