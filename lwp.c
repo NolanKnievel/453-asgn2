@@ -40,7 +40,8 @@ void lwp_yield(void) {
     // get next thread from scheduler
     scheduler s = lwp_get_scheduler();
     thread next_thread = s->next();
-    printf("Next thread: %lu\n", next_thread->tid);
+
+    printf("yielding to next thread: %lu\n", next_thread->tid);
 
     // if no next thread, terminate the program
     if (next_thread == NULL) {
@@ -52,10 +53,9 @@ void lwp_yield(void) {
     thread prev_current_thread = current_thread;
     current_thread = next_thread;
 
-    printf("Swapping rfiles\n");
     // save current thread state, and transfer control
     swap_rfiles(&(prev_current_thread->state), &(current_thread->state));
-    printf("Returning\n");
+    printf("Returning from yield\n");
     return; // pop return address into instruction pointer
 
 }
@@ -131,6 +131,10 @@ size_t get_stack_size() {
 }
 
 tid_t lwp_create(lwpfun function, void *argument) {
+    max_thread_id++;
+    printf("creating thread %d\n", max_thread_id);
+
+
     // Initialize new thread's stack frame
     size_t stack_size = get_stack_size();
     void *stack_ptr = mmap(NULL,stack_size,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK,-1,0);
@@ -141,9 +145,6 @@ tid_t lwp_create(lwpfun function, void *argument) {
 
     void *stack_bottom = (char *)stack_ptr + stack_size;
 
-    printf("bottom of stack: %p\n", stack_bottom);
-
-    max_thread_id++;
     // Initialize new thread's context
     thread t = malloc(sizeof(struct threadinfo_st));
     if (!t) {
@@ -174,6 +175,10 @@ tid_t lwp_create(lwpfun function, void *argument) {
     // admit new thread to the schedule
     scheduler s = lwp_get_scheduler();
     s->admit(t);
+    // schedule length
+    int length = s->qlen();
+    printf("Current schedule length: %d\n", length);
+    printf("returning from lwp_create\n");
 
     return t->tid;
 }
