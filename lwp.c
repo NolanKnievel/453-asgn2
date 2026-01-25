@@ -13,6 +13,8 @@
 
 // RULES
 // saved bp/end of args must be divisible by 16
+
+
 // TODO - move scheduler headers to otehr file
 // TODO - make sure we're terminating the program correctly
 
@@ -21,8 +23,11 @@
 // Saves current lwp context, picks next one and restores context
 // if no next thread, terminates the program
 
-// track current thread globally -- 
-static thread current_thread = NULL;
+// globals for our lwp system
+static thread current_thread = NULL; // track current thread 
+static int max_thread_id;
+
+
 
 
 // Terminates the current lwp, yields to whichever thread teh scheduler chooses
@@ -58,10 +63,11 @@ void lwp_yield(void) {
 
 // Starts the threading system. Converts original system thread into a LWP
 void lwp_start(void) {
-    
+    max_thread_id = 0
+
     // create a context for calling thread on the heap
     thread t = malloc(sizeof(struct threadinfo_st));
-    t->tid = 0;
+    t->tid = max_thread_id;
     t->sched_one = t;
     t->sched_two = t;
     t->stack = NULL;
@@ -133,14 +139,53 @@ tid_t lwp_create(lwpfun function, void *argument) {
         return -1;
     }
 
-    void *stack_top = (char *)stack_ptr + stack_size;
+    void *stack_bottom = (char *)stack_ptr + stack_size;
 
-    printf("top of stack: %p\n", stack_top);
+    printf("bottom of stack: %p\n", stack_bottom);
 
+    max_thread_id++;
     // Initialize new thread's context
+    thread t = malloc(sizeof(struct threadinfo_st));
+    if (!t) {
+        perror("malloc");
+        return -1;
+    }
+    t->tid = max_thread_id;
+    t->sched_one = t;
+    t->sched_two = t;
+    t->stack = stack_ptr; // base of mmap
+    t->stacksize = stack_size;
+    t->status = LWP_LIVE;
+    t->exited = NULL;
+    t->lib_one = NULL;
+    t->lib_two = NULL;
+
+    // set up stack for swaprfiles to teardown
+    uintptr_t *sp = (uintptr_t *)stack_bottom;
+
+    --sp; // spot for return address
+    *sp = (uintptr_t)lwpfun;
+
+    --sp;            // slot for old rbp
+    *sp = 0;         // fake frame pointer
+    t->state.rbp = (unsigned long)sp;
+
 
     // admit new thread to the schedule
-    return 0;
+    scheduler s = lwp_get_scheduler();
+    s->admit(t);
+
+    return t->tid;
+}
+
+static void lwp_wrap(lwpfun fun, void *arg) {
+    /*
+    call the given lwp function with the given argument
+    calls lwp_exit() with its return value
+    */
+    int rval;
+    rval=fun(arg);
+    lwp_exit(rval);
 }
 
 
