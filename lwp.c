@@ -164,7 +164,7 @@ tid_t lwp_create(lwpfun function, void *argument) {
     uintptr_t *sp = (uintptr_t *)stack_bottom;
 
     --sp; // spot for return address
-    *sp = (uintptr_t)lwpfun;
+    *sp = (uintptr_t)function;
 
     --sp;            // slot for old rbp
     *sp = 0;         // fake frame pointer
