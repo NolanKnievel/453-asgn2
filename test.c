@@ -6,7 +6,7 @@
 
 
 void print_fun(void *arg) {
-    printf("hello from a thread!");
+    printf("hello from a thread!\n");
     lwp_yield();
     return;
 }
