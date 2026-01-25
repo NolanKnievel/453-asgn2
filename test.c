@@ -7,7 +7,7 @@ int main() {
     printf("starting lwp!\n"); 
 
     lwp_start();
-    printf("creating thread\n")
+    printf("creating thread\n");
     lwp_create(NULL, NULL);
 
     
