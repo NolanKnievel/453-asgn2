@@ -22,9 +22,10 @@ int main() {
 
     // lwp_create(print_fun, NULL);
     // lwp_create(print_fun, NULL);
-    printf("yielding to next thread");
+    printf("yielding to next thread\n");
     lwp_yield(); // yield control to next thread in schedule
-    
+    lwp_yield();
+
     return 0;
 
 }
