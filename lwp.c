@@ -139,8 +139,6 @@ tid_t lwp_create(lwpfun function, void *argument) {
 
     // Initialize new thread's context
 
-
-
     // admit new thread to the schedule
     return 0;
 }

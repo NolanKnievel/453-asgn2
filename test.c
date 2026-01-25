@@ -8,8 +8,10 @@ int main() {
 
     lwp_start();
     printf("creating thread\n");
-    lwp_create(NULL, NULL);
 
+    lwp_create(NULL, NULL);
+    lwp_create(NULL, NULL);
+    lwp_create(NULL, NULL);
     
     return 0;
 
