@@ -3,6 +3,14 @@
 #include "lwp.h"
 #include "scheduler.h"
 
+
+
+void print_fun() {
+    printf("hello from a thread!");
+    lwp_yield();
+    return;
+}
+
 int main() {
     printf("starting lwp!\n"); 
 
@@ -16,10 +24,4 @@ int main() {
     
     return 0;
 
-}
-
-void print_fun() {
-    printf("hello from a thread!");
-    lwp_yield();
-    return;
 }
