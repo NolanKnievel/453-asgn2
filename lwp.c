@@ -63,7 +63,7 @@ void lwp_yield(void) {
 
 // Starts the threading system. Converts original system thread into a LWP
 void lwp_start(void) {
-    max_thread_id = 0
+    max_thread_id = 0;
 
     // create a context for calling thread on the heap
     thread t = malloc(sizeof(struct threadinfo_st));
@@ -178,15 +178,15 @@ tid_t lwp_create(lwpfun function, void *argument) {
     return t->tid;
 }
 
-static void lwp_wrap(lwpfun fun, void *arg) {
-    /*
-    call the given lwp function with the given argument
-    calls lwp_exit() with its return value
-    */
-    int rval;
-    rval=fun(arg);
-    lwp_exit(rval);
-}
+// static void lwp_wrap(lwpfun fun, void *arg) {
+//     /*
+//     call the given lwp function with the given argument
+//     calls lwp_exit() with its return value
+//     */
+//     int rval;
+//     rval=fun(arg);
+//     lwp_exit(rval);
+// }
 
 
 tid_t lwp_wait(int *status);
