@@ -123,6 +123,8 @@ void lwp_start(void) {
     t->lib_one = NULL;
     t->lib_two = NULL;
 
+    // set floating state
+    t->state.fxsave=FPU_INIT;
     // printf("starting LWP system\n thread id %lu\n", t->tid);
 
 
@@ -206,6 +208,10 @@ tid_t lwp_create(lwpfun function, void *argument) {
     t->exited = NULL;
     t->lib_one = NULL;
     t->lib_two = NULL;
+
+    // set floatign point state
+    t->state.fxsave=FPU_INIT;
+
 
     // printf("Created thread %lu\n", t->tid);
 
