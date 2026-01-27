@@ -297,7 +297,56 @@ tid_t lwp_wait(int *status) {
 }
 
 
-tid_t lw_gettid(void);
+// return thread ID of the calling LWP, or NO_THREAD if not called by lwp
+tid_t lw_gettid(void) {
+    return current_thread ? current_thread->tid : NO_THREAD;
+}
+
+// map a thread ID to a context, returns NULL if thread is invalid
+thread tid2thread(tid_t tid) {
+    thread found_thread = NULL;
+
+    // check current
+    if (current_thread && current_thread->tid == tid) {
+        return current_thread;
+    }
+
+
+    // check scheduler
+    scheduler s = lwp_get_scheduler();
+    thread schedule_thread = find_thread_in_schedule(tid);
+    if(schedule_thread != NULL) {
+        return schedule_thread;
+    }
+
+
+    // check waiting list
+    if(oldest_waiting_thread_head) {
+        thread current = oldest_waiting_thread_head;
+        while(current) {
+            if(current->tid == tid) {
+                found_thread = current;
+                break;
+            }
+            current = current->next_waiting;
+        }
+    }
+
+    // check terminated list
+    if(oldest_terminated_thread_head) {
+        thread current = oldest_terminated_thread_head;
+        while (current) {
+            if(current->tid == tid) {
+                found_thread = current;
+                break;
+            }
+            current = current->next_terminated;
+        }
+
+    }
+
+    return found_thread;
+}
 
 
 // static void lwp_wrap(lwpfun fun, void *arg) {

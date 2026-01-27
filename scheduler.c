@@ -124,6 +124,20 @@ void lwp_set_scheduler(scheduler sched) {
     }
 }
 
+// helper function - find_thread_in_schedule, returns NULL if thread not found
+thread find_thread_in_schedule(tid_t tid) {
+    if (!ready_head)
+        return NULL;
+
+    thread current = ready_head;
+    do {
+        if (current->tid == tid)
+            return current;
+        current = current->next;
+    } while (current != ready_head);
+
+    return NULL;
+}
 
 scheduler lwp_get_scheduler() {
     return current_scheduler;
