@@ -31,11 +31,11 @@ test : test.o liblwp.so
 	$(CC) -Wall -Werror test.o -L. -llwp -o test
 
 # Wandering Snakes demo
-snakemain: snakemain.o liblwp.so
-	$(CC) $(CFLAGS) snakemain.o -L. -llwp -o snakemain -lm -lncurses
+randomsnakes: randomsnakes.o liblwp.so
+	$(CC) $(CFLAGS) randomsnakes.o -L. -llwp -o randomsnakes -lm -lncurses
 
-snakemain.o : snakemain.c
-	$(CC) $(CFLAGS) -c snakemain.c -o numbersmain.o
+randomsnakes.o : randomsnakes.c
+	$(CC) $(CFLAGS) -c randomsnakes.c -o numbersmain.o
 
 
 # Indented numbers demo
