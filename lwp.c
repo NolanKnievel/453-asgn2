@@ -134,8 +134,8 @@ void lwp_start(void) {
     // update current_thread
     current_thread = t;
 
-    // // yield to next thread in schedule
-    // lwp_yield();
+    // yield to next thread in schedule
+    lwp_yield();
 
     return;
 }
