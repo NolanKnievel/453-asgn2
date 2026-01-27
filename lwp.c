@@ -82,6 +82,11 @@ void lwp_yield(void) {
     // get next thread from scheduler
     scheduler s = lwp_get_scheduler();
     thread next_thread = s->next();
+    if (!next_thread) {
+        fprintf(stderr, "No next thread to switch to. Terminating.\n");
+        exit(-1);
+    }
+
     printf("Yielding control from thread %lu to thread %lu\n", current_thread->tid, next_thread->tid);
 
 
