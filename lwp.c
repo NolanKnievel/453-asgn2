@@ -220,7 +220,7 @@ tid_t lwp_create(lwpfun function, void *argument) {
     scheduler s = lwp_get_scheduler();
     s->admit(t);
     // schedule length
-    int length = s->qlen();
+    // int length = s->qlen();
     // printf("Current schedule length: %d\n", length);
     // printf("returning from lwp_create\n");
 
