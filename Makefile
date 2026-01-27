@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Werror -fPIC
-SUPPLIED = ~/pn-cs453/Given/Asgn2
+SUPPLIED = ~pn-cs453/Given/Asgn2
 
 
 liblwp.so : lwp.o scheduler.o magic64.o
