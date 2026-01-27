@@ -39,9 +39,10 @@ randomsnakes.o : randomsnakes.c
 
 
 # Indented numbers demo
-numbersmain: numbersmain.o liblwp.so
-	$(CC) $(CFLAGS) numbersmain.c -L. -llwp -o numbersmain -lm
+numbersmain: numbersmain.o liblwp.so libsnakes.so
+	$(CC) -shared numbersmain.o liblwp.o magic64.o libsnakes.so -o numbersmain
 
+	
 numbersmain.o : numbersmain.c
 	$(CC) $(CFLAGS) -c numbersmain.c -o numbersmain.o
 
