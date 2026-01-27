@@ -30,10 +30,12 @@ void wait_fun(void *args) {
 int main() {
 
     lwp_start();
-
+    lwp_create((lwpfun)wait_fun, NULL);
     lwp_create((lwpfun)print_fun, NULL);
     lwp_create((lwpfun)wait_fun, NULL);
     lwp_create((lwpfun)print_fun2, NULL);
+    lwp_create((lwpfun)wait_fun, NULL);
+
 
     lwp_yield(); // yield control to next thread in schedule
     lwp_yield();
