@@ -24,7 +24,7 @@ void wait_fun(void *args) {
     int status = -1;
     unsigned long exited_thread = lwp_wait(&status);
     printf("thread %lu exited with status %d\n", exited_thread, status);
-    lwp_exit();
+    lwp_exit(4);
 }
 
 int main() {
