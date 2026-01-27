@@ -29,6 +29,9 @@ void wait_fun(void *args) {
 
 int main() {
 
+
+    lwp_set_scheduler(NULL); 
+
     lwp_create((lwpfun)wait_fun, NULL);
     lwp_create((lwpfun)print_fun, NULL);
     lwp_create((lwpfun)wait_fun, NULL);
