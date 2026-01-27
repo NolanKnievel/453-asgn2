@@ -13,20 +13,6 @@
 #define next_terminated lib_two
 
 
-
-
-// RULES
-// saved bp/end of args must be divisible by 16
-
-
-// TODO - move scheduler headers to otehr file
-// TODO - make sure we're terminating the program correctly
-
-
-// Yields control to another LWP, chosen by the scheduelr
-// Saves current lwp context, picks next one and restores context
-// if no next thread, terminates the program
-
 // globals for our lwp system
 static thread current_thread = NULL; // track current thread 
 static thread oldest_waiting_thread_head = NULL; // LL of waiting theads
@@ -213,8 +199,6 @@ tid_t lwp_create(lwpfun function, void *argument) {
     t->state.fxsave=FPU_INIT;
 
 
-    // printf("Created thread %lu\n", t->tid);
-
     // set up stack for swaprfiles to teardown
     uintptr_t *sp = (uintptr_t *)stack_bottom;
 
@@ -357,13 +341,3 @@ thread tid2thread(tid_t tid) {
     return found_thread;
 }
 
-
-// static void lwp_wrap(lwpfun fun, void *arg) {
-//     /*
-//     call the given lwp function with the given argument
-//     calls lwp_exit() with its return value
-//     */
-//     int rval;
-//     rval=fun(arg);
-//     lwp_exit(rval);
-// }

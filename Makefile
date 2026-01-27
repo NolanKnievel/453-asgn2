@@ -1,13 +1,14 @@
 CC = gcc
 CFLAGS = -Wall -Werror -fPIC
-# SUPPLIED = ~pn-cs453/Given/Asgn2
 SUPPLIED = //home/pn-cs453/Given/Asgn2/demos
 OBJS = lwp.o scheduler.o magic64.o
 
 
 
-liblwp.so : lwp.o scheduler.o magic64.o
+liblwp.so liblwp.a: lwp.o scheduler.o magic64.o
 	$(CC) -shared lwp.o scheduler.o magic64.o -o liblwp.so
+	ar rcs liblwp.a lwp.o scheduler.o magic64.o
+
 
 lwp.o : lwp.c lwp.h
 	$(CC) $(CFLAGS) -c lwp.c -o lwp.o
