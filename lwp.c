@@ -82,7 +82,7 @@ void lwp_yield(void) {
     scheduler s = lwp_get_scheduler();
     thread next_thread = s->next();
 
-    printf("yielding to next thread: %lu\n", next_thread->tid);
+    // printf("yielding to next thread: %lu\n", next_thread->tid);
 
     // if no next thread, terminate the program
     if (next_thread == NULL) {
@@ -96,7 +96,7 @@ void lwp_yield(void) {
 
     // save current thread state, and transfer control
     swap_rfiles(&(prev_current_thread->state), &(current_thread->state));
-    printf("Returning from yield\n");
+    // printf("Returning from yield\n");
     return; // pop return address into instruction pointer
 
 }
@@ -119,11 +119,11 @@ void lwp_start(void) {
     t->lib_two = NULL;
 
 
-    printf("swapping rfiles\n");
+    // printf("swapping rfiles\n");
     // save current register state
     // swap_rfiles(&t->state, NULL);
 
-    printf("setting scheduler\n");
+    // printf("setting scheduler\n");
     // admit calling thread to scheduler
     lwp_set_scheduler(NULL);
     scheduler s = lwp_get_scheduler();
@@ -132,12 +132,12 @@ void lwp_start(void) {
     // update current_thread
     current_thread = t;
 
-    printf("yielding\n");
+    // printf("yielding\n");
     // yield to next thread in schedule
     lwp_yield();
 
     // yielded back to main thread
-    printf("Thread yielded control\n");
+    // printf("Thread yielded control\n");
     return;
 }
 
@@ -221,8 +221,8 @@ tid_t lwp_create(lwpfun function, void *argument) {
     s->admit(t);
     // schedule length
     int length = s->qlen();
-    printf("Current schedule length: %d\n", length);
-    printf("returning from lwp_create\n");
+    // printf("Current schedule length: %d\n", length);
+    // printf("returning from lwp_create\n");
 
     return t->tid;
 }

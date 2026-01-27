@@ -11,18 +11,24 @@ void print_fun(void *arg) {
     return;
 }
 
+void wait_fun(void *args) {
+    printf("starting to wait\n");
+    unsigned int status = -1;
+    int exited_thread = lwp_wait(status);
+
+    printf("thread %d exited with status %d\n", exited_thread, status);
+
+
+}
+
 int main() {
-    printf("starting lwp!\n"); 
 
     lwp_start();
-    printf("creating thread\n");
 
     lwp_create((lwpfun)print_fun, NULL);
+    lwp_create((lwpfun)wait_fun, NULL);
     lwp_create((lwpfun)print_fun, NULL);
-    lwp_create((lwpfun)print_fun, NULL);
-    printf("threads created\n");
 
-    printf("yielding to next thread\n");
     lwp_yield(); // yield control to next thread in schedule
     lwp_yield();
 
