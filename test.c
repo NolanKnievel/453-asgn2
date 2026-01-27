@@ -13,8 +13,8 @@ void print_fun(void *arg) {
 
 void wait_fun(void *args) {
     printf("starting to wait\n");
-    unsigned int status = -1;
-    unsigned long int exited_thread = lwp_wait(status);
+    int status = -1;
+    unsigned long exited_thread = lwp_wait(status);
 
     printf("thread %lu exited with status %d\n", exited_thread, status);
 
