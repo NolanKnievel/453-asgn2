@@ -32,7 +32,7 @@ test : test.o liblwp.so
 
 # Wandering Snakes demo
 randomsnakes: randomsnakes.o liblwp.so
-	gcc -Wall -Werror -fPIC randomsnakes.o -L. -llwp -lsnakes -o randomsnakes -lm -lncurses
+	gcc -Wall -Werror -fPIC randomsnakes.o util.o -L. -llwp -lsnakes -o randomsnakes -lm -lncurses
 
 randomsnakes.o : randomsnakes.c
 	$(CC) $(CFLAGS) -c randomsnakes.c -o randomsnakes.o
