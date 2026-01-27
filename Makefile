@@ -30,8 +30,14 @@ test : test.o liblwp.so
 	$(CC) -Wall -Werror test.o -L. -llwp -o test
 
 # Wandering Snakes demo
-snakemain: $(SUPPLIED)/snakemain.c lwp.c
-	$(CC) $(CFLAGS) $(SUPPLIED)/snakemain.c lwp.o -o snakemain -lncurses -lm
+snakemain: snakemain.c lwp.c
+	$(CC) $(CFLAGS) snakemain.c lwp.o -o snakemain -lncurses -lm
+
+# Indented numbers demo
+numbersmain: numbersmain.c lwp.o
+	$(CC) $(CFLAGS) numbersmain.c lwp.o -o numbersmain -lm
+
+
 
 
 clean:
