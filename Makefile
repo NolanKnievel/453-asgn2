@@ -35,7 +35,7 @@ randomsnakes: randomsnakes.o liblwp.so
 	$(CC) $(CFLAGS) randomsnakes.o -L. -llwp -o randomsnakes -lm -lncurses
 
 randomsnakes.o : randomsnakes.c
-	$(CC) $(CFLAGS) -c randomsnakes.c -o numbersmain.o
+	$(CC) $(CFLAGS) -c randomsnakes.c -o randomsnakes.o
 
 
 # Indented numbers demo
