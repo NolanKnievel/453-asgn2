@@ -2,6 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Werror -fPIC
 # SUPPLIED = ~pn-cs453/Given/Asgn2
 SUPPLIED = //home/pn-cs453/Given/Asgn2/demos
+OBJS = lwp.o scheduler.o magic64.o
 
 
 
@@ -35,7 +36,7 @@ snakemain: snakemain.c lwp.c
 
 # Indented numbers demo
 numbersmain: numbersmain.c lwp.o
-	$(CC) $(CFLAGS) numbersmain.c lwp.o -o numbersmain -lm
+	$(CC) $(CFLAGS) numbersmain.c $(OBJS) -o numbersmain -lm
 
 
 
