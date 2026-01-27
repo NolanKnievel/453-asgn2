@@ -8,6 +8,10 @@
 #include "scheduler.h"
 
 #define DEFAULT_STACK_SIZE (8 * 1024 * 1024) // 8 MB
+// Definitions for waiting and terminated lists
+#define next_waiting lib_one
+#define next_terminated lib_two
+
 
 
 
@@ -25,6 +29,8 @@
 
 // globals for our lwp system
 static thread current_thread = NULL; // track current thread 
+static thread oldest_waiting_thread_head = NULL; // LL of waiting theads
+static thread oldest_terminated_thread_head = NULL; // LL of terminated threads
 static int max_thread_id;
 
 
@@ -199,6 +205,75 @@ tid_t lwp_create(lwpfun function, void *argument) {
     return t->tid;
 }
 
+
+// deallocates the resources of next terminated thread
+// blocks until the thread terminates, returns NO_THREAD if none left to wait for
+tid_t lwp_wait(int *status) {
+    // maintain list of waiting threads
+    // maintain list of terminated threads
+
+    scheduler s = lwp_get_scheduler();
+    
+    // check if there are terminated threads
+    if(oldest_terminated_thread_head) {
+        // deallocate oldest one
+        thread deallocate_thread = oldest_terminated_thread_head;
+
+        // update LL
+        thread next_thread = oldest_terminated_thread_head->next_terminated
+        if(next_thread) {
+            oldest_terminated_thread_head = next_thread;
+        }
+        else { // no more after
+            oldest_terminated_thread_head = NULL;
+        }
+
+        // deallocate thread's stack
+        // free thread struct
+        free(deallocate_thread);
+    }
+    else if (s->qlen() <= 0) { // check there's more threads
+        return NO_THREAD;
+    }
+    else {
+        // put on waiting list
+        if (oldest_waiting_thread_head == NULL) {
+            oldest_waiting_thread_head = current_thread;
+            current_thread->next_waiting=NULL;
+        }
+        else {
+            thread current = oldest_waiting_thread_head
+            while (current->next_waiting) {
+                current = current->next_waiting;
+            }
+            current->next_waiting=current_thread
+            current_thread->next_waiting=NULL;
+        }
+        // blocking -- deschedule and yield
+        s->remove(current_thread);
+        lwp_yield();
+    }
+
+
+    // if not, check if there are more threads
+        // put current thread on waiting list
+        // deschedule current thread
+        // yield
+        
+        // if no more threads, return NO_THREAD
+
+
+
+    // updatae status if provided
+    // return tid
+
+
+}
+
+
+tid_t lw_gettid(void);
+
+
 // static void lwp_wrap(lwpfun fun, void *arg) {
 //     /*
 //     call the given lwp function with the given argument
@@ -208,7 +283,3 @@ tid_t lwp_create(lwpfun function, void *argument) {
 //     rval=fun(arg);
 //     lwp_exit(rval);
 // }
-
-
-tid_t lwp_wait(int *status);
-tid_t lw_gettid(void);
