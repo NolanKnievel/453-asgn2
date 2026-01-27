@@ -31,8 +31,12 @@ test : test.o liblwp.so
 	$(CC) -Wall -Werror test.o -L. -llwp -o test
 
 # Wandering Snakes demo
-randomsnakes: randomsnakes.o liblwp.so
+randomsnakes: randomsnakes.o liblwp.so util.o
 	gcc -Wall -Werror -fPIC randomsnakes.o util.o -L. -llwp -lsnakes -o randomsnakes -lm -lncurses
+
+util.o : util.c
+	$(CC) $(CFLAGS) -c util.c -o util.o
+
 
 randomsnakes.o : randomsnakes.c
 	$(CC) $(CFLAGS) -c randomsnakes.c -o randomsnakes.o
