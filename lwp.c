@@ -39,7 +39,7 @@ static int max_thread_id;
 // Terminates the current lwp, yields to whichever thread the scheduler chooses
 // Does not return
 void lwp_exit(int exitval) {
-    printf("Exiting thread %d with status %d\n", current_thread->tid, exitval);
+    printf("Exiting thread %lu with status %d\n", current_thread->tid, exitval);
     //  termination status becomes the low 8 bits of exitval
     current_thread->status = MKTERMSTAT(LWP_TERM, exitval);
 
@@ -82,7 +82,7 @@ void lwp_yield(void) {
     // get next thread from scheduler
     scheduler s = lwp_get_scheduler();
     thread next_thread = s->next();
-    printf("Yielding control from thread %d to thread %d\n", current_thread->tid, next_thread->tid);
+    printf("Yielding control from thread %lu to thread %lu\n", current_thread->tid, next_thread->tid);
 
 
     // if no next thread, terminate the program
@@ -118,7 +118,7 @@ void lwp_start(void) {
     t->lib_one = NULL;
     t->lib_two = NULL;
 
-    printf("starting LWP system\n thread id %d\n", t->tid);
+    printf("starting LWP system\n thread id %lu\n", t->tid);
 
 
     // admit calling thread to scheduler
@@ -196,7 +196,7 @@ tid_t lwp_create(lwpfun function, void *argument) {
     t->lib_one = NULL;
     t->lib_two = NULL;
 
-    printf("Created thread %d\n", t->tid);
+    printf("Created thread %lu\n", t->tid);
 
     // set up stack for swaprfiles to teardown
     uintptr_t *sp = (uintptr_t *)stack_bottom;
@@ -227,7 +227,7 @@ tid_t lwp_create(lwpfun function, void *argument) {
 // deallocates the resources of next terminated thread
 // blocks until the thread terminates, returns NO_THREAD if none left to wait for
 tid_t lwp_wait(int *status) {
-    printf("Waiting for thread termination in thread %d\n", current_thread->tid);
+    printf("Waiting for thread termination in thread %lu\n", current_thread->tid);
 
     scheduler s = lwp_get_scheduler();
 
