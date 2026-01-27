@@ -35,8 +35,11 @@ snakemain: snakemain.c lwp.c
 	$(CC) $(CFLAGS) snakemain.c lwp.o -o snakemain -lncurses -lm
 
 # Indented numbers demo
-numbersmain: numbersmain.c lwp.o
-	$(CC) $(CFLAGS) numbersmain.c $(OBJS) -o numbersmain -lm
+numbersmain: numbersmain.o liblwp.so
+	$(CC) $(CFLAGS) numbersmain.c -L. -llwp -o numbersmain -lm
+
+numbersmain.o : numbersmain.c
+	$(CC) $(CFLAGS) -c numbersmain.c -o numbersmain.o
 
 
 
