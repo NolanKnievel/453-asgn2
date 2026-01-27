@@ -46,14 +46,32 @@ void lwp_exit(int exitval) {
     schedule s = lwp_get_scheduler();
     s->remove(current_thread);
 
+    // put current thread on terminated threads list
+    if(oldest_terminated_thread_head == NULL) {
+        oldest_terminated_thread_head=current_thread;
+    }
+    else {
+        thread current = oldest_terminated_thread_head;
+        while (current->next_terminated) {
+            current = current->next_terminated;
+        }
+        current->next_terminated = current_thread;
+        current_thread->next_terminated=NULL;
+    }
+
+    // reschedule a waiting thread if there is one
+    if(oldest_waiting_thread_head != NULL) {
+        thread rescheduling_thread = oldest_waiting_thread_head;
+        oldest_waiting_thread_head = oldest_waiting_thread_head->next_waiting;
+        s->admit(rescheduling_thread);
+    }
+
     // yield to next thread
     lwp_yield();
 
     // Error - yield returns to lwp exit
     fprintf(stderr, "lwp_exit: fatal error, returned from lwp_yield\n");
     exit(1);
-
-
 }
 
 
@@ -213,30 +231,41 @@ tid_t lwp_wait(int *status) {
     // maintain list of terminated threads
 
     scheduler s = lwp_get_scheduler();
-    
-    // check if there are terminated threads
-    if(oldest_terminated_thread_head) {
-        // deallocate oldest one
-        thread deallocate_thread = oldest_terminated_thread_head;
 
-        // update LL
-        thread next_thread = oldest_terminated_thread_head->next_terminated
-        if(next_thread) {
-            oldest_terminated_thread_head = next_thread;
-        }
-        else { // no more after
-            oldest_terminated_thread_head = NULL;
+    // loop - run until we successfully deschedule or fail
+    while (1) {
+        // check if there are terminated threads
+        if(oldest_terminated_thread_head) {
+            // deallocate oldest one
+            thread deallocate_thread = oldest_terminated_thread_head;
+
+            // update LL
+            thread next_thread = oldest_terminated_thread_head->next_terminated
+            if(next_thread) {
+                oldest_terminated_thread_head = next_thread;
+            }
+            else { // no more after
+                oldest_terminated_thread_head = NULL;
+            }
+            
+            int deallocate_id = deallocate_thread->tid;
+            // update status
+            if (status != NULL) {
+                *status = deallocate_thread->status;
+            }
+            // deallocate thread's stack
+            munmap(deallocate_thread->stack, deallocate_thread->stacksize);
+            // free thread struct
+            free(deallocate_thread);
+            return deallocate_id;
         }
 
-        // deallocate thread's stack
-        // free thread struct
-        free(deallocate_thread);
-    }
-    else if (s->qlen() <= 0) { // check there's more threads
-        return NO_THREAD;
-    }
-    else {
-        // put on waiting list
+        // no terminated threads waiting --
+        if (s->qlen() <= 0) { // check if there are more threads
+            return NO_THREAD;
+        }
+
+        // blocking -- put current thread on waiting list
         if (oldest_waiting_thread_head == NULL) {
             oldest_waiting_thread_head = current_thread;
             current_thread->next_waiting=NULL;
@@ -249,23 +278,11 @@ tid_t lwp_wait(int *status) {
             current->next_waiting=current_thread
             current_thread->next_waiting=NULL;
         }
-        // blocking -- deschedule and yield
+
+        // deschedule and yield
         s->remove(current_thread);
         lwp_yield();
     }
-
-
-    // if not, check if there are more threads
-        // put current thread on waiting list
-        // deschedule current thread
-        // yield
-        
-        // if no more threads, return NO_THREAD
-
-
-
-    // updatae status if provided
-    // return tid
 
 
 }
