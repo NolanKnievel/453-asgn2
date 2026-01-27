@@ -32,7 +32,7 @@ test : test.o liblwp.so
 
 # Wandering Snakes demo
 randomsnakes: randomsnakes.o liblwp.so
-	$(CC) $(CFLAGS) randomsnakes.o -L. -llwp -o randomsnakes -lm -lncurses
+	gcc -Wall -Werror -fPIC randomsnakes.o -L. -llwp -lsnakes -o randomsnakes -lm -lncurses
 
 randomsnakes.o : randomsnakes.c
 	$(CC) $(CFLAGS) -c randomsnakes.c -o randomsnakes.o
@@ -42,7 +42,7 @@ randomsnakes.o : randomsnakes.c
 numbersmain: numbersmain.o liblwp.so libsnakes.so
 	$(CC) -shared numbersmain.o liblwp.o magic64.o libsnakes.so -o numbersmain
 
-	
+
 numbersmain.o : numbersmain.c
 	$(CC) $(CFLAGS) -c numbersmain.c -o numbersmain.o
 
