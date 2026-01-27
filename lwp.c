@@ -63,6 +63,7 @@ void lwp_exit(int exitval) {
     if(oldest_waiting_thread_head != NULL) {
         thread rescheduling_thread = oldest_waiting_thread_head;
         oldest_waiting_thread_head = oldest_waiting_thread_head->next_waiting;
+        rescheduling_thread->next_waiting = NULL;
         s->admit(rescheduling_thread);
     }
 
@@ -210,6 +211,9 @@ tid_t lwp_create(lwpfun function, void *argument) {
     --sp;            // slot for old rbp
     *sp = 0;         // fake frame pointer
     t->state.rbp = (unsigned long)sp;
+    t->state.rsp = (unsigned long)sp;
+    t->state.rdi = (unsigned long)argument;
+
 
 
     // admit new thread to the schedule
@@ -254,15 +258,17 @@ tid_t lwp_wait(int *status) {
             if (status != NULL) {
                 *status = deallocate_thread->status;
             }
-            // deallocate thread's stack
-            munmap(deallocate_thread->stack, deallocate_thread->stacksize);
+            // deallocate thread's stack, but not original thread
+            if (deallocate_thread->stack != NULL){
+                munmap(deallocate_thread->stack, deallocate_thread->stacksize);
+            }
             // free thread struct
             free(deallocate_thread);
             return deallocate_id;
         }
 
         // no terminated threads waiting --
-        if (s->qlen() <= 0) { // check if there are more threads
+        if (s->qlen() <= 1) { // check if there are more threads
             return NO_THREAD;
         }
 
