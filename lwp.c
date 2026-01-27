@@ -272,7 +272,7 @@ tid_t lwp_wait(int *status) {
             current_thread->next_waiting=NULL;
         }
         else {
-            thread current = oldest_waiting_thread_head
+            thread current = oldest_waiting_thread_head;
             while (current->next_waiting) {
                 current = current->next_waiting;
             }
