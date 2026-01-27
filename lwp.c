@@ -239,7 +239,7 @@ tid_t lwp_wait(int *status) {
         // check if there are terminated threads
         if(oldest_terminated_thread_head) {
 
-            printf("found thread on LL with id: %d\n", oldest_terminated_thread_head->tid);
+            printf("found thread on LL with id: %lu\n", oldest_terminated_thread_head->tid);
             // deallocate oldest one
             thread deallocate_thread = oldest_terminated_thread_head;
 
