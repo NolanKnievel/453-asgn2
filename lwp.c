@@ -171,6 +171,12 @@ size_t get_stack_size() {
 }
 
 tid_t lwp_create(lwpfun function, void *argument) {
+    // make sure there's a scheduler
+    if(lwp_get_scheduler == NULL) {
+        lwp_set_scheduler(NULL); 
+    }
+
+    
     max_thread_id++;
     printf("creating thread %d\n", max_thread_id);
 
