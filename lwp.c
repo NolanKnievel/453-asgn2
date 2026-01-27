@@ -43,7 +43,7 @@ void lwp_exit(int exitval) {
     current_thread->exit_status = exitval & 0xFF;
 
     // deschedule current thread
-    schedule s = lwp_get_scheduler();
+    scheduler s = lwp_get_scheduler();
     s->remove(current_thread);
 
     // put current thread on terminated threads list
@@ -240,11 +240,12 @@ tid_t lwp_wait(int *status) {
             thread deallocate_thread = oldest_terminated_thread_head;
 
             // update LL
-            thread next_thread = oldest_terminated_thread_head->next_terminated
+            thread next_thread = oldest_terminated_thread_head->next_terminated;
             if(next_thread) {
                 oldest_terminated_thread_head = next_thread;
             }
-            else { // no more after
+            else { 
+                // no more after
                 oldest_terminated_thread_head = NULL;
             }
             
@@ -275,7 +276,7 @@ tid_t lwp_wait(int *status) {
             while (current->next_waiting) {
                 current = current->next_waiting;
             }
-            current->next_waiting=current_thread
+            current->next_waiting=current_thread;
             current_thread->next_waiting=NULL;
         }
 
