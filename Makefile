@@ -25,6 +25,11 @@ test.o : test.c lwp.h scheduler.h
 test : test.o liblwp.so
 	$(CC) -Wall -Werror test.o -L. -llwp -o test
 
+# Wandering Snakes demo
+snakemain: snakemain.c lwp.c
+	$(CC) $(CFLAGS) snakemain.c lwp.o -o snakemain -lncurses -lm
+
+
 
 clean:
 	rm -f *.o *.so test_scheduler
