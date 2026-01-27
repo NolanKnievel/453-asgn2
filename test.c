@@ -8,6 +8,7 @@
 void print_fun(void *arg) {
     printf("hello from a thread!\n");
     lwp_yield();
+    lwp_exit(5);
     return;
 }
 
@@ -15,7 +16,6 @@ void wait_fun(void *args) {
     printf("starting to wait\n");
     int status = -1;
     unsigned long exited_thread = lwp_wait(&status);
-
     printf("thread %lu exited with status %d\n", exited_thread, status);
 
 }
