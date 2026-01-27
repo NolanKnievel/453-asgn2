@@ -231,8 +231,6 @@ tid_t lwp_create(lwpfun function, void *argument) {
 // deallocates the resources of next terminated thread
 // blocks until the thread terminates, returns NO_THREAD if none left to wait for
 tid_t lwp_wait(int *status) {
-    // maintain list of waiting threads
-    // maintain list of terminated threads
 
     scheduler s = lwp_get_scheduler();
 
@@ -240,6 +238,8 @@ tid_t lwp_wait(int *status) {
     while (1) {
         // check if there are terminated threads
         if(oldest_terminated_thread_head) {
+
+            printf("found thread on LL with id: %d\n", oldest_terminated_thread_head->tid);
             // deallocate oldest one
             thread deallocate_thread = oldest_terminated_thread_head;
 
@@ -274,10 +274,12 @@ tid_t lwp_wait(int *status) {
 
         // blocking -- put current thread on waiting list
         if (oldest_waiting_thread_head == NULL) {
+            printf("no threads found terminated, putting current thread on waiting list\n");
             oldest_waiting_thread_head = current_thread;
             current_thread->next_waiting=NULL;
         }
         else {
+            printf("no threads found terminated, putting current thread on waiting list\n");
             thread current = oldest_waiting_thread_head;
             while (current->next_waiting) {
                 current = current->next_waiting;
