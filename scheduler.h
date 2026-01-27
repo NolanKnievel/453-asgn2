@@ -9,6 +9,8 @@ thread rr_next(void);
 int rr_qlen(void);
 extern void lwp_set_scheduler(scheduler sched);
 extern scheduler lwp_get_scheduler(void);
+extern thread find_thread_in_schedule(tid_t tid);
+
 
 // pre-defined RR scheduler
 extern struct scheduler rr_publish;

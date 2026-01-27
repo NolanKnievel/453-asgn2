@@ -313,7 +313,6 @@ thread tid2thread(tid_t tid) {
 
 
     // check scheduler
-    scheduler s = lwp_get_scheduler();
     thread schedule_thread = find_thread_in_schedule(tid);
     if(schedule_thread != NULL) {
         return schedule_thread;
