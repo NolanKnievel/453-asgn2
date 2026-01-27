@@ -40,7 +40,7 @@ static int max_thread_id;
 // Does not return
 void lwp_exit(int exitval) {
     //  termination status becomes the low 8 bits of exitval
-    current_thread->status = exitval & 0xFF;
+    current_thread->status = MKTERMSTAT(LWP_TERM, exitval);
 
     // deschedule current thread
     scheduler s = lwp_get_scheduler();

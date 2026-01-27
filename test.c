@@ -23,7 +23,7 @@ void wait_fun(void *args) {
     printf("starting to wait\n");
     int status = -1;
     unsigned long exited_thread = lwp_wait(&status);
-    printf("thread %lu exited with status %d\n", exited_thread, status);
+    printf("thread %lu exited with status %d\n", exited_thread, LWPTERMSTAT(status));
     lwp_exit(4);
 }
 
