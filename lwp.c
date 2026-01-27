@@ -298,7 +298,7 @@ tid_t lwp_wait(int *status) {
 
 
 // return thread ID of the calling LWP, or NO_THREAD if not called by lwp
-tid_t lw_gettid(void) {
+tid_t lwp_gettid(void) {
     return current_thread ? current_thread->tid : NO_THREAD;
 }
 
